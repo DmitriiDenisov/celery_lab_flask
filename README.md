@@ -28,9 +28,7 @@ http://127.0.0.1:15672/#/queues, что эквивалентно http://localhos
 5) На новой машине в config.py:
 ```celery_brocker_url = 'amqp://worker:worker@<ip_address_где_крутится_Rabbit>' ``` # worker - worker это логин и пароль. Например,
 ```celery_broker_url = 'amqp://worker:worker@192.168.0.102' ```
-6) Запускаем через терминал (терминал можно в Pycharm) ``` 'celery worker --concurrency 2 -A celery_lab -Q email' ``` #тут email - название очереди
-
-Прим.1: если выдается ошибка:[Errno 61] Connection refused. Это означает, что он пытается подцепиться к Локальному (!) Rabbit, нужно заставить его коннектиться к глобальному
+6) Запускаем через терминал (терминал можно в Pycharm) ``` 'celery worker --concurrency 2 -A celery_lab -Q email' ``` #тут email - название очереди. Прим.: если выдается ошибка:[Errno 61] Connection refused. Это означает, что он пытается подцепиться к Локальному (!) Rabbit, нужно заставить его коннектиться к глобальному
 7) Набрать команду 'hostname' в треминале. Выведется что-то в роде: 'MacBook-Air-2.local'. Надо взять 'MacBook-Air-2'
 8) ``` 'nano /usr/local/etc/rabbitmq/rabbitmq-env.conf' ```
 9) Правим - NODE_IP_ADDRESS=0.0.0.0
