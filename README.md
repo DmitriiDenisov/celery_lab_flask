@@ -1,6 +1,6 @@
 ## Чтобы установить Rabbit-MQ:
-    brew services start rabbitmq
-    Ссылка на RabbitMQ:
+brew services start rabbitmq
+Ссылка на RabbitMQ:
     http://127.0.0.1:15672/#/queues, что эквивалентно http://localhost:15672/#/queues. То есть 127.0.0.1 = localhost
     Пароль: guest
 
