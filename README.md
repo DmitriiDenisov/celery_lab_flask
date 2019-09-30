@@ -49,3 +49,6 @@ NODENAME=rabbit@MacBook-Air-2
 http://172.20.10.2:5000/email
 
 К одной очереди можно подключить несколько разных машин.
+
+## Узнать IP в локальной сети:
+Sotlight -> Network Utility либо в terminal выполнить `ifconfig` и найти параметр en0: inet 
