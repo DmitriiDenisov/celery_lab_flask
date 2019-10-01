@@ -41,14 +41,16 @@ Sotlight -> Network Utility либо в terminal выполнить `ifconfig` �
 
 ## If Remote broker does not work:
 In case of error: [Errno 61] Connection refused. That means that you are trying to connect to local Rabbit
-It is known issue, proof: https://superuser.com/questions/464311/open-port-5672-tcp-for-access-to-rabbitmq-on-mac
+It is known issue, proof:
+
+https://superuser.com/questions/464311/open-port-5672-tcp-for-access-to-rabbitmq-on-mac
+http://www.robopgmr.com/?tag=rabbitmq
 
 1) Print 'hostname' in terminal. For example you will see 'MacBook-Air-2.local'
 2) ``` nano /usr/local/etc/rabbitmq/rabbitmq-env.conf ```
-3) Edit:
-
-```NODE_IP_ADDRESS=0.0.0.0```
+3) Edit:```NODE_IP_ADDRESS=0.0.0.0```
 ```NODENAME=rabbit@MacBook-Air-2```
+
 4) Save it: - Ctrl-O, Enter, Ctrl-x, Enter
 5) ```brew services restart rabbitmq```
 6) Add new user in RabbitMQ and do not forget to set permissions for it in web-inteface
