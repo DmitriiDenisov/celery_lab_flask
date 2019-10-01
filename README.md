@@ -1,10 +1,10 @@
-## Celery lab with Flask
+# Celery lab with Flask
 This repo is fully based on this one:
 https://github.com/DmitriiDenisov/celery_lab
 
 Basically it adds small API using Flask which is stored in celery_lab/web/app.py 
 
-### Reminder for RabbitMQ
+## Reminder for RabbitMQ
 https://github.com/DmitriiDenisov/rabbitmq_lab
 
 ## Launch Flask app:
