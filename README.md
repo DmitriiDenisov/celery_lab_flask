@@ -11,8 +11,11 @@ https://github.com/DmitriiDenisov/rabbitmq_lab
 1. Run celery_lab/web/app.py
 2. Make POST/GET requests (via Postman for example):
 Examples:
+
 http://127.0.0.1:5001/email_and_sms
+
 http://127.0.0.1:5001/stupid-task
+
 http://127.0.0.1:5001/home
 
 ## Remote broker / Remote worker:
