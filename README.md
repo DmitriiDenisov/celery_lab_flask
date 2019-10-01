@@ -1,54 +1,55 @@
-## Чтобы установить Rabbit-MQ:
-```brew services start rabbitmq```
-Ссылка на RabbitMQ:
+## Celery lab with Flask
+This repo is fully based on this one:
+https://github.com/DmitriiDenisov/celery_lab
 
-http://127.0.0.1:15672/#/queues, что эквивалентно http://localhost:15672/#/queues. То есть 127.0.0.1 = localhost; Пароль: guest
+Basically it adds small API using Flask which is stored in celery_lab/web/app.py 
 
-## Как запустить воркер на текущей машине:
-1. Создать venv в папке с проектом, сделать ```pip install requirements.txt```
-2. В консольке сначала cd в папку с проектом, затем: ```source venv/bin/activate``` (активируем терминал в venv)
-3. Далее запуск Worker'a:
-```celery worker --concurrency 2 -A celery_lab -Q lab.generate_and_sum_of_lists```
---concurrency - число дочерних процессов в Воркере, дефолт: 4
--A - название проекта
--Q - перечисляем названия очередей. Например, -Q SMS,email. Или -Q SMS,email,hard_task
+### Reminder for RabbitMQ
+https://github.com/DmitriiDenisov/rabbitmq_lab
 
-## Как делать запросы (добавлять в очередь элементы):
-Примеры запросов (для Postman):
+## Launch Flask app:
+1. Run celery_lab/web/app.py
+2. Make POST/GET requests (via Postman for example):
+Examples:
+http://127.0.0.1:5001/email_and_sms
+http://127.0.0.1:5001/stupid-task
+http://127.0.0.1:5001/home
 
-http://127.0.0.1:5000/email_and_sms
-    
-http://127.0.0.1:5000/stupid-task
-    
-http://127.0.0.1:5000/home
-    
-Здесь 127.0.0.1 = localhost, 5000 - порт Фласка, home - метод, который прописывается в app.py
+## Remote broker / Remote worker:
+Change in config.py file: 
 
-## Для воркеров на разных машинах:
-1) Прописываем в run: host='0.0.0.0'. Это позволит делать глобальные обращения (=в сети)
-2) Проверяем, что работает. Для этого зайти в настройки сети Settings -> Network. Там взять IP соединения. Например, 192.168.0.102
-3) Далее проверяем, вбиваем в браузере http://192.168.0.102:5000/. (Это обращение глобальное к фласку, он находится на 5000 порте). Должно быть "The requested URL was not found on the server."
-4) В RabbitMQ создаем нового юзера, например, логин:worker; пароль:worker
-5) На новой машине в config.py:
-```celery_brocker_url = 'amqp://worker:worker@<ip_address_где_крутится_Rabbit>' ``` # worker - worker это логин и пароль. Например,
-```celery_broker_url = 'amqp://worker:worker@192.168.0.102' ```
-6) Запускаем через терминал (терминал можно в Pycharm) ``` 'celery worker --concurrency 2 -A celery_lab -Q email' ``` #тут email - название очереди. Прим.: если выдается ошибка:[Errno 61] Connection refused. Это означает, что он пытается подцепиться к Локальному (!) Rabbit, нужно заставить его коннектиться к глобальному
-7) Набрать команду 'hostname' в треминале. Выведется что-то в роде: 'MacBook-Air-2.local'. Надо взять 'MacBook-Air-2'
-8) ``` 'nano /usr/local/etc/rabbitmq/rabbitmq-env.conf' ```
-9) Правим - NODE_IP_ADDRESS=0.0.0.0
-NODENAME=rabbit@MacBook-Air-2
-10) Чтобы сохранить - Ctrl-O, Enter, Ctrl-x, Enter
-11) brew services restart rabbitmq
-12) Заново заводим юзера worker (через интерфейс Rabbit MQ), жмем set permissions
-13) повторить пункт 6)
+``` celery_broker_url = 'amqp://{user}:{password}@{ip}' ```
+
+For example:
+``` celery_broker_url = 'amqp://one_user:12345@35.202.136.165' ```
+
+## Launch worker on your Machine:
+Just an example how to launch worker:
+
+```celery worker --concurrency 3 -A celery_lab.celery_settings -Q SMS,email```
+
+--concurrency - number of concurrent processes, default: 4
+
+-A - entry point. In the example above it is ~/celery_lab/celery_settings.py
+
+-Q - list queues you want to listen to. For example, -Q SMS,email or -Q SMS,email,hard_task
 
 
-## Чтобы ставить таски (добавлять в очередь), можно использовать браузер/postman любого компьютера в сети.
-По порту 5000 находится Фласк. Таким образом, запросы строятся по типу:
-```http://<IP>:5000/<название_метода> ```, например
-http://172.20.10.2:5000/email
-
-К одной очереди можно подключить несколько разных машин.
-
-## Узнать IP в локальной сети:
+## Know IP in local network (MacOS)
 Sotlight -> Network Utility либо в terminal выполнить `ifconfig` и найти параметр en0: inet 
+
+
+## If Remote broker does not work:
+In case of error: [Errno 61] Connection refused. That means that you are trying to connect to local Rabbit
+It is known issue, proof: https://superuser.com/questions/464311/open-port-5672-tcp-for-access-to-rabbitmq-on-mac
+
+1) Print 'hostname' in terminal. For example you will see 'MacBook-Air-2.local'
+2) ``` nano /usr/local/etc/rabbitmq/rabbitmq-env.conf ```
+3) Edit:
+
+```NODE_IP_ADDRESS=0.0.0.0```
+```NODENAME=rabbit@MacBook-Air-2```
+4) Save it: - Ctrl-O, Enter, Ctrl-x, Enter
+5) ```brew services restart rabbitmq```
+6) Add new user in RabbitMQ and do not forget to set permissions for it in web-inteface
+7) Launch worker via ```celery worker ...```

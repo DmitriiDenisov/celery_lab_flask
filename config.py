@@ -1,5 +1,5 @@
-#celery_broker_url = 'amqp://localhost'
-celery_broker_url = 'amqp://worker:worker@192.168.0.37'
+celery_broker_url = 'amqp://localhost'
+# celery_broker_url = 'amqp://dmitry:12345@35.202.136.165'
 celery_imports = ['celery_lab.tasks']
 
 # celery_task_routes = {
