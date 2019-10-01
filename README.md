@@ -39,7 +39,7 @@ Just an example how to launch worker:
 
 
 ## Know IP in local network (MacOS)
-Sotlight -> Network Utility либо в terminal выполнить `ifconfig` и найти параметр en0: inet 
+Sotlight -> Network Utility. Or print in terminal `ifconfig` and found parameter: ```en0: inet ```
 
 
 ## If Remote broker does not work:
